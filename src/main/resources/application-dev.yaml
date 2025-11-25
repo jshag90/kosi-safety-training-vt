@@ -1,0 +1,9 @@
+spring:
+  r2dbc:
+    url: r2dbc:pool:mariadb://localhost:3306/db_kosi_safety_training
+    username: root
+    password: 1234
+    driver-class-name: org.mariadb.jdbc.Driver
+
+server:
+  port: 8085
