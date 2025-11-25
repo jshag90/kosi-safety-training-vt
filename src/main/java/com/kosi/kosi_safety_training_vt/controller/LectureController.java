@@ -10,24 +10,31 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+import java.time.Instant;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/course-lecture")
 public class LectureController {
 
     private final CourseLectureService courseLectureService;
 
-    @GetMapping("/video/{lectureId}")
+    @GetMapping("/lecture/video/{lectureId}")
     public Mono<ResponseEntity<ResourceRegion>> getLectureStream(
-            @PathVariable("lectureId") Long lectureId,
+            @PathVariable Long lectureId,
             @RequestHeader HttpHeaders headers
     ) {
+        log.info("LectureStream 요청 시작. lectureId={}, thread={}", lectureId, Thread.currentThread().getName());
+
         return courseLectureService.getLectureStream(headers, lectureId)
-                .map(lectureStreamDto -> ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
+                .doOnNext(dto -> log.info("LectureStreamDto 준비 완료. lectureId={}, thread={}", lectureId, Thread.currentThread().getName()))
+                .doOnError(ex -> log.error("LectureStream 처리 중 오류 발생. lectureId={}, error={}", lectureId, ex.getMessage(), ex))
+                .map(dto -> ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
                         .header(HttpHeaders.ACCEPT_RANGES, "bytes")
-                        .contentType(lectureStreamDto.getMediaType())
-                        .body(lectureStreamDto.getResourceRegion())
-                );
+                        .contentType(dto.getMediaType())
+                        .body(dto.getResourceRegion()));
     }
 
 }
