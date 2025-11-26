@@ -1,7 +1,6 @@
 package com.kosi.kosi_safety_training_vt.service;
 
 import com.kosi.kosi_safety_training_vt.dto.LectureStreamDto;
-import com.kosi.kosi_safety_training_vt.entity.Video;
 import com.kosi.kosi_safety_training_vt.repository.VideoRepository;
 import com.kosi.kosi_safety_training_vt.util.VideoUtil;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.Callable;
 
 @Service
