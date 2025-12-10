@@ -3,4 +3,4 @@ spring:
     name: kosi-safety-training-vt
 
   profiles:
-    active: dev
+    active: prod
